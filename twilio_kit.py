@@ -54,16 +54,25 @@ def get_recipients(conn):
 	for row in rows:
 		print(row[0].encode('ascii'))
 
-def send_alert(conn, exclude, message):
+def get_zipcode(conn, phone):
+	print("Getting zipcode for "+phone)
+	cur = conn.cursor()
+	cur.execute("SELECT zip_code FROM wics_wics WHERE phone=?", (phone[2:], ))
+	result = cur.fetchone()
+	zipcode = result[0].encode('ascii').decode('utf-8')
+	return zipcode
+
+
+def send_alert(conn, incoming, message):
 	'''Sends an alert message to all subscribers (excluding the sendee)'''
 	cur = conn.cursor()
-	cur.execute("SELECT phone FROM wics_wics where phone!=exclude")
+	zipcode = get_zipcode(conn, incoming)
+	cur.execute("SELECT phone FROM wics_wics WHERE phone != ? AND zip_code = ?", (incoming[2:], zipcode ))
 	rows = cur.fetchall()
 	for row in rows:
-		phone = row[0].encode('ascii')
-		phone = "+1"+phone.decode("utf-8")  #prepend country code
-		if phone != exclude:
-			send_message(phone, message) # TODO:: Check for zipcodes
+		phone = row[0].encode('ascii').decode("utf-8")
+		phone = "+1"+phone  #prepend country code
+		send_message(phone, message) # TODO:: Check for zipcodes
 
 def go_through_clients(message):
     recipients = ['+14082203759','+18087804109']
