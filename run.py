@@ -2,12 +2,11 @@
 # Download the twilio-python library from twilio.com/docs/libraries/python
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
-from twilio_kit import getClientList, go_through_clients
+from twilio_kit import send_alert, create_connection
 
 app = Flask(__name__)
 
 @app.route("/sms", methods=['GET', 'POST'])
-
 def incoming_sms():
 	"""Send a dynamic reply to an incoming text message"""
 	# Get the message the user sent our Twilio number
@@ -17,8 +16,9 @@ def incoming_sms():
 	print(number)
 	# Start our TwiML response
 	resp = MessagingResponse()
-	cL = getClientList()
-	go_through_clients(cL,bdy)
+	conn = create_connection("db.sqlite3")
+	with conn:
+		send_alert(conn, body)
 
 	# Determine the right reply for this message
 #	if bdy == 'hello':
@@ -40,9 +40,11 @@ def sms_ahoy_reply():
 	# Add a message
 	resp.message("Ahoy! Thanks so much for your message.")
 
-	
+
 	return str(resp)
 
 '''
+
+phone = row[0].encode('ascii')
 if __name__ == "__main__":
 	app.run(debug=True)

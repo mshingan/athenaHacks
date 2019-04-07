@@ -1,11 +1,10 @@
 # Download the helper library from https://www.twilio.com/docs/python/install
 from twilio.rest import Client
-from django.db import models 
+from django.db import models
 import sqlite3
 from sqlite3 import Error
 
-
-clientList = ['+14082203759','+18087804109'] 
+#clientList = ['+14082203759','+18087804109'] 
 # Your Account Sid and Auth Token from twilio.com/console
 # DANGER! This is insecure. See http://twil.io/secure
 account_sid = 'ACad92a5094df25b847bb064650e650ad2'
@@ -14,7 +13,7 @@ client = Client(account_sid, auth_token)
 
 def send_message(recipient, message = "Thank you for signing up for our app!"):
 	'''Sends the message to the recipient number(s), returns the sid'''
-	
+
 	message = client.messages.create(
 					 body = message,
 					 from_ ='+16507419499',
@@ -43,10 +42,9 @@ def create_connection(db):
 		return conn
 	except Error as e:
 		print(e)
-
 	return None
 
-
+#clientList = ['+14082203759']
 def get_recipients(conn):
 	cur = conn.cursor()
 #	cur.execute("ALTER TABLE blog_blog RENAME COLUMN title TO email")
@@ -55,16 +53,34 @@ def get_recipients(conn):
 	cur.execute("SELECT phone FROM blog_blog")
 	rows = cur.fetchall()
 	for row in rows:
-		clientList.append(row)
+		print(row[0].encode('ascii'))
 
 def go_through_clients(recipients, message):
 	for i in recipients: 
 		send_message(i,message) 
 
-def getClientList():
-	return clientList
+#def getClientList():
+#	return clientList
 #conn = create_connection("db.sqlite3")
 #with conn:
 #	print(get_recipients(conn))
+
+def send_alert(conn, message):
+	cur = conn.cursor()
+	cur.execute("SELECT phone FROM blog_blog")
+	rows = cur.fetchall()
+	for row in rows:
+		phone = row[0].encode('ascii')
+		phone = "+1"+phone
+		send_message(phone, message)
+
+def go_through_clients(recipients):
+	for i in recipients:
+		send_message(i)
+
+# conn = create_connection("db.sqlite3")
+# with conn:
+# 	get_recipients(conn)
 #go_through_clients(clientList)
 #print(go_through_clients(['+14082203759']))
+#send_message("+18087804109")
