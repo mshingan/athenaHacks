@@ -55,18 +55,18 @@ def get_recipients(conn):
 		print(row[0].encode('ascii'))
 
 def send_alert(conn, exclude, message):
-    '''Sends an alert message to all subscribers (excluding the sendee)'''
+	'''Sends an alert message to all subscribers (excluding the sendee)'''
 	cur = conn.cursor()
 	cur.execute("SELECT phone FROM blog_blog")
 	rows = cur.fetchall()
 	for row in rows:
 		phone = row[0].encode('ascii')
-        phone = "+1"+phone #prepend country code
-        if phone != exclude:
-            send_message(phone, message) # TODO:: Check for zipcodes
+		phone = "+1"+phone #prepend country code
+		if phone != exclude:
+			send_message(phone, message) # TODO:: Check for zipcodes
 
 def go_through_clients(message):
-    recipients = ['+14082203759','+18087804109']
+    recipients = ['+14082203759','+18087804109', "+16572625521"]
     for i in recipients:
         send_message(i, message)
 
