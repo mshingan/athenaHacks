@@ -4,7 +4,7 @@ from django.db import models
 import sqlite3
 from sqlite3 import Error
 
-#clientList = ['+14082203759','+18087804109'] 
+#clientList = ['+14082203759','+18087804109']
 # Your Account Sid and Auth Token from twilio.com/console
 # DANGER! This is insecure. See http://twil.io/secure
 account_sid = 'ACad92a5094df25b847bb064650e650ad2'
@@ -44,7 +44,6 @@ def create_connection(db):
 		print(e)
 	return None
 
-#clientList = ['+14082203759']
 def get_recipients(conn):
 	cur = conn.cursor()
 #	cur.execute("ALTER TABLE blog_blog RENAME COLUMN title TO email")
@@ -55,28 +54,20 @@ def get_recipients(conn):
 	for row in rows:
 		print(row[0].encode('ascii'))
 
-def go_through_clients(recipients, message):
-	for i in recipients: 
-		send_message(i,message) 
-
-#def getClientList():
-#	return clientList
-#conn = create_connection("db.sqlite3")
-#with conn:
-#	print(get_recipients(conn))
-
-def send_alert(conn, message):
+def send_alert(conn, exclude, message):
 	cur = conn.cursor()
 	cur.execute("SELECT phone FROM blog_blog")
 	rows = cur.fetchall()
 	for row in rows:
 		phone = row[0].encode('ascii')
-		phone = "+1"+phone
-		send_message(phone, message)
+        phone = "+1"+phone #prepend country code
+        if phone != exclude:
+            send_message(phone, message) # TODO:: Check for zipcodes
 
-def go_through_clients(recipients):
-	for i in recipients:
-		send_message(i)
+def go_through_clients(message):
+    recipients = ['+14082203759','+18087804109']
+    for i in recipients:
+        send_message(i, message)
 
 # conn = create_connection("db.sqlite3")
 # with conn:
