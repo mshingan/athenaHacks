@@ -13,7 +13,7 @@ def incoming_sms():
 	body = request.values.get('Body', None)
 	number = request.values.get('From',None)
 	summary = '''
-	from: {}\n
+	from: {}
 	message: {}'''.format(number, body)
 
 	# Start our TwiML response
@@ -27,7 +27,7 @@ def incoming_sms():
 
 	conn = create_connection("db.sqlite3")
 	if conn is None:
-		summary = "ERROR UNABLE TO CONNECT TO DB!!!"
+		summary += "ERROR UNABLE TO CONNECT TO DB!!!"
 	else:
 		with conn:
 			go_through_clients(body)

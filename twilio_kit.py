@@ -12,7 +12,7 @@ auth_token = '516a23ce73cd5b9b68e58435836d0c73'
 client = Client(account_sid, auth_token)
 
 def send_message(recipient, message = "Thank you for signing up for our app!"):
-	'''Sends the message to the recipient number(s), returns the sid'''
+	'''Sends the message to the recipient number, returns the sid'''
 
 	message = client.messages.create(
 					 body = message,
@@ -23,7 +23,7 @@ def send_message(recipient, message = "Thank you for signing up for our app!"):
 	return(message.sid)
 
 def validate_number(number):
-	'''validates the given number with the given name, returns a validation code.
+	'''validates the given number, returns a validation code.
 	The user will receive a phone call and will be prompted for this code.'''
 	validation_request = client.validation_requests.create(
 								phone_number= number)
@@ -55,6 +55,7 @@ def get_recipients(conn):
 		print(row[0].encode('ascii'))
 
 def send_alert(conn, exclude, message):
+    '''Sends an alert message to all subscribers (excluding the sendee)'''
 	cur = conn.cursor()
 	cur.execute("SELECT phone FROM blog_blog")
 	rows = cur.fetchall()

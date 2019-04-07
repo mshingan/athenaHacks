@@ -16,7 +16,12 @@ def add_client(request):
         if form.is_valid():
             wics_item = form.save(commit=False)
             wics_item.save()
-            # return redirect('/congrats')
+            #validate_number(form.phone)
+            return redirect('/confirm')
     else:
         form = WICSForm()
     return render(request,'signup.html',{'form': form})
+
+def confirm(request):
+    '''confirmation page after signup'''
+    return render(request, 'confirmation.html')
