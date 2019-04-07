@@ -6,15 +6,37 @@ from twilio.twiml.messaging_response import MessagingResponse
 app = Flask(__name__)
 
 @app.route("/sms", methods=['GET', 'POST'])
+
+def incoming_sms():
+	"""Send a dynamic reply to an incoming text message"""
+	# Get the message the user sent our Twilio number
+	body = request.values.get('Body', None)
+	number = request.values.get('From',None)
+	print(body)
+	print(number)
+	# Start our TwiML response
+	resp = MessagingResponse()
+
+	# Determine the right reply for this message
+	if body == 'hello':
+		resp.message("Hi!")
+	elif body == 'bye':
+		resp.message("Goodbye")
+
+	return str(resp)
+
+'''
 def sms_ahoy_reply():
-    """Respond to incoming messages with a friendly SMS."""
-    # Start our response
-    resp = MessagingResponse()
+	"""Respond to incoming messages with a friendly SMS."""
+	# Start our response
+	resp = MessagingResponse()
 
-    # Add a message
-    resp.message("Ahoy! Thanks so much for your message.")
+	# Add a message
+	resp.message("Ahoy! Thanks so much for your message.")
 
-    return str(resp)
+	
+	return str(resp)
 
+'''
 if __name__ == "__main__":
-    app.run(debug=True)
+	app.run(debug=True)
