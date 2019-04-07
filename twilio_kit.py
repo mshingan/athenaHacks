@@ -5,7 +5,7 @@ import sqlite3
 from sqlite3 import Error
 
 
-clientList = ['+14082203759'] 
+clientList = ['+14082203759','+18087804109'] 
 # Your Account Sid and Auth Token from twilio.com/console
 # DANGER! This is insecure. See http://twil.io/secure
 account_sid = 'ACad92a5094df25b847bb064650e650ad2'
@@ -52,17 +52,19 @@ def get_recipients(conn):
 #	cur.execute("ALTER TABLE blog_blog RENAME COLUMN title TO email")
 #	cur.execute("ALTER TABLE blog_blog ADD zipcode")
 #	cur.execute("ALTER TABLE blog_blog ADD phoneNumber")
-	cur.execute("SELECT email FROM blog_blog")
+	cur.execute("SELECT phone FROM blog_blog")
 	rows = cur.fetchall()
 	for row in rows:
-		print(row)
+		clientList.append(row)
 
-def go_through_clients(recipients):
+def go_through_clients(recipients, message):
 	for i in recipients: 
-		send_message(i) 
+		send_message(i,message) 
 
+def getClientList():
+	return clientList
 #conn = create_connection("db.sqlite3")
 #with conn:
 #	print(get_recipients(conn))
-go_through_clients(clientList)
+#go_through_clients(clientList)
 #print(go_through_clients(['+14082203759']))
