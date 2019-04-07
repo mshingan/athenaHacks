@@ -51,7 +51,7 @@ def get_recipients(conn):
 	cur = conn.cursor()
 #	cur.execute("ALTER TABLE blog_blog RENAME COLUMN title TO email")
 #	cur.execute("ALTER TABLE blog_blog ADD zipcode")
-	cur.execute("ALTER TABLE blog_blog ADD phoneNumber")
+#	cur.execute("ALTER TABLE blog_blog ADD phoneNumber")
 	cur.execute("SELECT email FROM blog_blog")
 	rows = cur.fetchall()
 	for row in rows:
