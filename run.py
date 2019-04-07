@@ -2,7 +2,7 @@
 # Download the twilio-python library from twilio.com/docs/libraries/python
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
-from twilio_kit import send_alert, create_connection, go_through_clients
+from twilio_kit import *
 
 app = Flask(__name__)
 
@@ -30,7 +30,6 @@ def incoming_sms():
 		summary += "ERROR UNABLE TO CONNECT TO DB!!!"
 	else:
 		with conn:
-			#go_through_clients(body)
 			send_alert(conn, number, body)
 
 	return str(resp)
