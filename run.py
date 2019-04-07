@@ -25,15 +25,15 @@ def incoming_sms():
 
 	resp.message("We recieved your message, and will send it out to people in the area")
 
-	conn = create_connection("db.sqlite3")
+	conn = create_connection("athenahacks/db.sqlite3")
 	if conn is None:
 		summary += "ERROR UNABLE TO CONNECT TO DB!!!"
 	else:
 		with conn:
-			go_through_clients(body)
-			#send_alert(conn, number, message)
+			#go_through_clients(body)
+			send_alert(conn, number, body)
 
-	return summary
+	return str(resp)
 
 
 '''
